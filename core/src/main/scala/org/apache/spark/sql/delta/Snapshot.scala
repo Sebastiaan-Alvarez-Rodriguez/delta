@@ -63,7 +63,7 @@ class Snapshot(
     val checksumOpt: Option[VersionChecksum])
   extends StateCache
   with PartitionFiltering
-  with DeltaFileFormat
+  with DeltaDataFileFormat
   with DeltaLogging {
 
   import Snapshot._
