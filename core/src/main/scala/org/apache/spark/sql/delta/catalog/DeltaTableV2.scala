@@ -19,27 +19,25 @@ package org.apache.spark.sql.delta.catalog
 import java.{util => ju}
 
 // scalastyle:off import.ordering.noEmptyLine
-import scala.collection.JavaConverters._
-import scala.collection.mutable
-
-import org.apache.spark.sql.delta.{DeltaErrors, DeltaLog, DeltaOperations, DeltaOptions, DeltaTableIdentifier, DeltaTableUtils, DeltaTimeTravelSpec, Snapshot}
-import org.apache.spark.sql.delta.GeneratedColumn
+import org.apache.hadoop.fs.Path
+import org.apache.spark.sql.catalyst.TableIdentifier
+import org.apache.spark.sql.catalyst.catalog.{CatalogTable, CatalogUtils}
+import org.apache.spark.sql.connector.catalog.TableCapability._
+import org.apache.spark.sql.connector.catalog._
+import org.apache.spark.sql.connector.expressions._
+import org.apache.spark.sql.connector.write._
 import org.apache.spark.sql.delta.commands.WriteIntoDelta
 import org.apache.spark.sql.delta.metering.DeltaLogging
 import org.apache.spark.sql.delta.sources.{DeltaDataSource, DeltaSourceUtils}
-import org.apache.hadoop.fs.Path
-
-import org.apache.spark.sql.{AnalysisException, DataFrame, SaveMode, SparkSession}
-import org.apache.spark.sql.catalyst.TableIdentifier
-import org.apache.spark.sql.catalyst.catalog.{CatalogTable, CatalogUtils}
-import org.apache.spark.sql.connector.catalog.{SupportsWrite, Table, TableCapability, TableCatalog, V2TableWithV1Fallback}
-import org.apache.spark.sql.connector.catalog.TableCapability._
-import org.apache.spark.sql.connector.expressions._
-import org.apache.spark.sql.connector.write.{LogicalWriteInfo, SupportsOverwrite, SupportsTruncate, V1WriteBuilder, WriteBuilder}
+import org.apache.spark.sql.delta.{DeltaErrors, DeltaLog, DeltaOptions, DeltaTableIdentifier, DeltaTableUtils, DeltaTimeTravelSpec, GeneratedColumn, Snapshot}
 import org.apache.spark.sql.execution.datasources.LogicalRelation
 import org.apache.spark.sql.sources.{BaseRelation, Filter, InsertableRelation}
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.util.CaseInsensitiveStringMap
+import org.apache.spark.sql.{AnalysisException, DataFrame, SaveMode, SparkSession}
+
+import scala.collection.JavaConverters._
+import scala.collection.mutable
 
 /**
  * The data source V2 representation of a Delta table that exists.
